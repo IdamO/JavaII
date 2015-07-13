@@ -1,0 +1,36 @@
+/*	
+	Description: This program displays the first 100 prime numbers
+ 	
+ 	Name: Obiahu, Idam
+ 	Course: COSC 1437 Programming Fundamentals II
+ 
+ */
+
+public class PrimeNumbers {
+	public static void main(String args[]){
+		int count;//counter variable
+		int i;//current number variable
+		int j;//variable for checking all the numbers before current number
+		
+		System.out.println("---------------------------------------------------------");
+		/*Initialize i variable to 2 because 1 is not a prime number*/
+		for (i = 2, count = 0; count < 100; i++)
+		{
+			/*Checks to see if current number is a prime factor*/
+			for(j = 2; j < i; j++)
+			{
+				/*Condition for the case that number is not a prime factor*/
+				if ((i%j) == 0)
+					break;
+			}
+				/*If number is a prime factor, it is displayed*/
+			if (i == j)
+			{
+				System.out.println(+ i);
+				count++;//increases the count when a prime factor is found
+			}
+		}
+		System.out.println("---------------------------------------------------------");
+	}
+
+}
