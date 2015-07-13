@@ -1,0 +1,64 @@
+import java.io.*;
+import java.util.*;
+
+/** 
+ * ---------------------------------------------------------------------------------------------
+ * Description: This program implements an ArrayList and makes displays each word as a unique
+ * 				word to the standard output 
+ *	
+ *	Author: Abass, Alamnehe
+ *	Edited by: Obiahu, Idam
+ *	
+ *	Name: Obiahu, Idam
+ *	Course: COSC 1437 Programming Fundamentals II
+ *	Instructor: Abass, Alamnehe
+ ---------------------------------------------------------------------------------------------
+ **/
+public class Unique {
+
+
+   ArrayList<String> words = new ArrayList<String>();		//Creates an ArrayList to store Strings
+
+   
+   public void add(String fileName) throws IOException {    
+      
+	/* Read strings from file one by one*/
+	  File inFile = new File(fileName);
+      Scanner input = new Scanner(inFile);
+      
+      while (input.hasNext()) {
+         String word = input.next() ;                     	// reads the next string 
+         word = word.replaceAll("[^a-z || ^A-Z ]", "");     // replaces anything that is NOT an alphabet
+         words.add(word) ;                                  // adds to the ArrayList
+      }
+      input.close();
+   }
+ 
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * Displays the ArrayList to the screen, using format print
+    * ---------------------------------------------------------------------------------------------
+    **/   
+   public void print() {
+      int i=0; 
+      for (String word: words) {                    // references "words" to ArrayList "word"
+         System.out.printf("%s, ", word) ;          // using the 'format print' to print out strings in the list
+         /*For artistic value*/
+         if (i+1 == words.size())                 	
+         System.out.printf("%s ", word) ;           // Does not add a comma after the last word     
+         if (i++ % 8 == 0)							// to print 8 words per line
+         System.out.println();						// prints newline
+      }
+   }
+   
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * An entry point for program execution 
+    * ---------------------------------------------------------------------------------------------
+    **/  
+   public static void main(String[] args) throws IOException {
+      Unique ut = new Unique() ;
+      ut.add("text.txt");
+      ut.print();
+   }
+}
