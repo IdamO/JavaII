@@ -1,0 +1,113 @@
+ /**	
+	Description: This program implements bubble and insertion sort to order an array of numbers
+ 	
+ 	Name: Obiahu, Idam
+ 	Course: COSC 1437 Programming Fundamentals II
+ 
+ */
+
+import java.util.* ;
+public class Sorting {
+   /**
+    * ---------------------------------------------------------------------------------------------  
+    * Sorting using Bubble Sorting algorithm
+    * ---------------------------------------------------------------------------------------------  
+    */
+   int[] sortBubble(int[] numbers) {
+      int i;//array index
+      int j;//checking index
+      int temp;//temporary placeholder
+      
+      /*Check the array members one after the other*/
+      for (i=0; i < numbers.length; i++)
+      {
+    	  /*Move the largest numbers in the array to end*/
+    	  for(j = i+1; j < numbers.length; j++)
+    	  {
+    		  if(numbers[i] > numbers[j])
+    		  {
+    			/*Switch the small and large numbers so that the array is ordered*/
+    			  temp = numbers[i];
+    			  numbers[i] = numbers[j];
+    			  numbers[j] = temp;
+    		  }
+    		  else
+    			  continue;
+    	  }
+      }
+      	   return numbers;
+   }
+   
+   /**
+    * --------------------------------------------------------------------------------------------- 
+    * Sorting using Insertion Sorting algorithm
+    * --------------------------------------------------------------------------------------------- 
+    */
+   int[] sortInsertionAlgorithm(int[] numbers) {
+      // do insertion sorting here
+	   int i, j, temp;
+	   
+	   /*Loop through the members of the array*/
+	   for (i = 1 ; i <= numbers.length - 1; i++)
+	   {
+		    j = i;
+		 
+		    /*Move smallest numbers to the beginning of the array*/
+		    while ( j > 0 && (numbers[j] < numbers[j-1])) {
+		      temp = numbers[j];
+		      numbers[j]   = numbers[j-1];
+		      numbers[j-1] = temp;
+		      j--;
+		    }
+		  
+	   }  
+      return numbers; 
+   }
+
+   /**
+    * ---------------------------------------------------------------------------------------------  
+    * Shuffle the array
+    * ---------------------------------------------------------------------------------------------  
+    */
+   int[] shuffle(int[] numbers) {
+      Random rand = new Random() ;
+      final int max = 20 ;
+      for (int i=0; i < max; i++) {
+         int k = rand.nextInt(numbers.length) ;
+         int j = rand.nextInt(numbers.length) ;
+         int temp = numbers[k] ;
+         numbers[k] = numbers[j] ;
+         numbers[j] = temp ;         
+      }
+      return numbers; 
+   }
+   /**
+    * --------------------------------------------------------------------------------------------- 
+    * print array
+    * --------------------------------------------------------------------------------------------- 
+    */
+   void print(int[] numbers) {
+      System.out.print("values ==> ") ;         // prints caption
+      for (int i=0; i < numbers.length; i++)    // prints array
+         System.out.print(numbers[i] + ", ") ;      
+      System.out.println("") ;                    // prints newline
+   }
+   
+   /**
+    * --------------------------------------------------------------------------------------------- 
+    * @param args the command line arguments
+    * --------------------------------------------------------------------------------------------- 
+    */
+   public static void main(String[] args) {      
+      int[] values = {12, -1, 1000, 9, -45, 200, 6, 7067, 0, -12} ;  // declares an integer array
+      Sorting sort = new Sorting() ;            // create an object       
+      sort.print(values);                       // print values here
+      System.out.print("Bubble Sort ");
+      values = sort.sortBubble(values) ;        // sort using bubble algorithm
+      sort.print(values);                       // print values here
+      values = sort.shuffle(values) ;           // shuffle the array
+      sort.print(values);                       // print values here
+      values = sort.sortInsertionAlgorithm(values) ;  // sort using insertion alg.
+      System.out.print("Insertion Sort ");
+      sort.print(values);// print values here      
+   }
