@@ -1,0 +1,210 @@
+import java.io.*;
+import java.util.* ;
+
+/**	
+Description: This program implements various arithmetic operations on a set of values read in from a ".txt" file
+	
+	Name: Obiahu, Idam
+	Course: COSC 1437 Programming Fundamentals II
+
+*/
+
+public class Project1 {
+   int values[] ;                                      // array for the set
+   int size = 0;                                    // used to keep the size of the array
+   
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * Finds number of elements in the file
+    * ---------------------------------------------------------------------------------------------
+    **/
+   public int countElements(String fileName) throws IOException {
+      File inFile = new File(fileName);             // creates a file object to represent the input file
+      Scanner read = new Scanner(inFile);           // Use scanner to read from an input stream
+      
+      int count =  0;
+      while (read.hasNext()) {                      // read until end of file
+         read.nextInt() ;                           // read the next integer value without retaining it
+         count++ ;                                  // increment the counter
+      }
+
+      read.close();                                 // close the input stream
+      return count ;                                // returns the number of elements in the given file
+   }
+
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * readSets the array with the data from the input file
+    * ---------------------------------------------------------------------------------------------
+    **/
+   public void readSet(String fileName) throws IOException {
+      size = countElements(fileName) ;              // find out the number of elements in the input file
+      values = new int[size] ;                         // creates the array based on the number of elements in the input file
+      
+      File inFile = new File(fileName);             // Let a File object represent the input file
+      Scanner read = new Scanner(inFile);           // use the Scanner class to read the input stream 
+      
+      int index = 0;                                // index to the array
+      while (read.hasNext()) {                      // repeat until the end of the loop
+         values[index] = read.nextInt();               // reads and populates the array
+         index++;                                   // update the index
+      }
+      read.close();                                 // closes the input stream
+   }
+   
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * sorts the given array 
+    * ---------------------------------------------------------------------------------------------
+    **/
+   public void sort() {
+      for (int i=0; i < size; i++) {                // repeats for until the end of the array
+         for (int j=i+1; j < size; j++) {           // internal loop to determine the smallest number
+            if (values[i] > values[j]) {                  // if the current element is not smaller, perform swap
+               int temp = values[i];
+               values[i] = values[j];
+               values[j] = temp;
+            }
+         }         
+      }
+   }
+   
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * determines the arithmetic mean of the set 
+    * ---------------------------------------------------------------------------------------------
+    **/
+   public int getArithmeticMean() {
+      int total = 0;                                // variable to hold sum of array elements
+      int i;                                    // index for the array
+      for (i = 0; i < size; i++) {                       // repeats until the end of the array
+         total += values[i];                           // adds to the variable total
+      }
+      return (total/i) ;                            // returns the average of of the set
+   }
+   
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * determines the arithmetic median of the set 
+    * ---------------------------------------------------------------------------------------------
+    **/
+   public int getArithmeticMedian() {
+	   /*NOTE: Only valid for a sorted numbers*/
+      int median;                                // variable to hold the median of the elements
+      int mid = size/2;							// mid point of the array
+      
+      /*If the total number of elements is even-numbered, the median is the average of the two middle numbers*/
+      if ((size%2) == 0)
+      {
+    	  median = (values[mid] + values[mid+1])/2;
+      }
+      /*If total number of elements is odd-numbered, the median is the middle value*/
+      else 
+    	  median = values[mid];
+      
+      return median ;                            // returns the median of the set
+   }
+   
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * determines the arithmetic mode of the set 
+    * ---------------------------------------------------------------------------------------------
+    **/
+   public void getArithmeticMode() {
+	  /*NOTE: Only valid for a sorted numbers*/
+	  int mode = values[0];
+      int count = 0;							// variable to count how many times a value is repeated 
+      int i;									// array index
+      int temp = values[0];						// variable to check the value before
+      int max=0;                                // variable to hold the maximum value
+      int []modeArray = new int[100];
+      int k=0;
+      
+      /*Check every element of the array*/
+      for (i = 1; i < size; i++)
+      {
+    	  /*If the current element is the same as the last one, count it*/
+    	  while (values[i] == temp)
+    	  {
+    		  count++;
+    		  i++;
+    	  }
+    	  
+    	  /*If the number counted is greater than the current maximum, replace it*/
+    	  if(count > max)
+    	  {
+    		  k = 0;
+    		  max = count;
+    		  modeArray[k] = values[i-1];
+    		  k++;
+    	  }
+    	  else if (count == max)
+    	  {
+    		  modeArray[k] = values[i-1];
+    		  k++;
+    	  }
+    	  
+    	  count = 0;							//restart count for every new number
+    	  temp = values[i];						//set the temporary value to the current value, before the index is incremented
+      }
+      
+      System.out.print("Arithmetic Mode: ");
+      for (int j=0 ; j<k; j++)
+      {
+    	  System.out.print(modeArray[j]+ " ");
+      }
+      System.out.println();
+   }
+   
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * determines the arithmetic range of the set 
+    * ---------------------------------------------------------------------------------------------
+    **/
+   public int getArithmeticRange() {
+	   /*NOTE: Only valid for a sorted numbers*/
+	  int i=0;									//variable to hold the index of the array
+	  int range;								//variable to hold the range
+      
+      /*For sorted arrays*/
+      range = values[size-1] - values[i];		//last element minus first element gives range
+      return range;                            // returns the range of the set
+   }
+   
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * prints the array 
+    * ---------------------------------------------------------------------------------------------
+    **/
+   public void print() {
+      System.out.println("\n+-------------------------------------+") ;
+      System.out.println("Numbers in the Array") ;
+      System.out.println("+-------------------------------------+") ;
+      for (int i=0; i < size; i++) {
+         System.out.println(i+1 + ".\t" + values[i]) ;
+      }
+   }
+   
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * An entry point for program execution 
+    * ---------------------------------------------------------------------------------------------
+    **/
+   public static void main(String[] args) throws IOException {
+	  System.out.println() ;
+	  System.out.print("Before sorting...");
+	  Project1 da = new Project1();         // creates an instance of this class
+      da.readSet("data.txt");                       // reads the set from the input file 
+      da.print();                                   // prints the array
+      System.out.println("\nAfter sorting...");
+      da.sort();                                    // sorts the array
+      da.print();                                   // prints the array
+      System.out.println("+-------------------------------------+") ;
+      System.out.println("Arithmetic Mean: " + da.getArithmeticMean()); //displays the arithmetic mean
+      System.out.println("Arithmetic Median: " + da.getArithmeticMedian()); //displays the arithmetic median
+      da.getArithmeticMode(); //displays the arithmetic mode
+      System.out.println("Arithmetic Range: " + da.getArithmeticRange()); //displays the arithmetic range
+      System.out.println("+-------------------------------------+") ;
+   }
+
+}
