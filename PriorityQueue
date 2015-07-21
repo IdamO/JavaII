@@ -1,0 +1,229 @@
+/** 
+ * ---------------------------------------------------------------------------------------------
+ * 	Description : This program executes a simple enqueue and dequeue function of linked lists. 
+ *  It also includes placing an element in an ordered list using insertion sort
+ * 
+ 	Author: Abass, Alamnehe
+ 	Edited by: Obiahu, Idam
+ 	
+ 	Name: Obiahu, Idam
+ 	Course: COSC 1437 Programming Fundamentals II
+ 	Instructor: Abass, Alamnehe
+ *
+ * ---------------------------------------------------------------------------------------------
+ **/
+
+
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+
+class Integer{
+   public String name = "";
+	public int value = 0;            // stores an integer value
+   Integer next = null ;            // used to point to the next Integer object in the queue
+		   
+   // constructor is responsible for initializing the member variable value
+   public Integer(String name, int value) {
+      this.name = name;
+	   this.value = value;
+   }
+}
+
+/** 
+ * ---------------------------------------------------------------------------------------------
+ * The class implements a simple queue order based on linked list. 
+ * 
+ * ---------------------------------------------------------------------------------------------
+ **/
+public class PriorityQueue {
+   Integer front = null;                // points to the first element of the queue
+   Integer prev  = null;                // points to the last element of the queue
+   Integer checker = null;
+   
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * Creates an element of Integer and add it to the queue 
+    *
+    * ---------------------------------------------------------------------------------------------
+    **/   
+   public void enQueue(String name, int value) {
+	   Integer list = new Integer(name, value);	//creates a new object for the node
+	   
+	 /* base case for the first element */
+	   if (front == null)					
+           front = prev = list;				//both the first node and the current node are set to the first element
+     //NOTE: New objects of type "Integer" point to null by default, so no need to explicitly set list.next to null
+	 
+	 /* If the new element to be added isn't first */
+	   else
+       {
+           prev.next = list; 	//the last element references the new object
+           prev = list;			//the current node is set to the newly created object (which, in turn, has a list.next value of null) 
+       }
+	
+
+   }
+
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * Creates an element of Integer and add it to the queue in descending order
+    * @param name is the ship name
+    * 		value is the priority value 
+    *
+    * ---------------------------------------------------------------------------------------------
+    **/
+   
+   public void orderQueue(String name, int value) {
+	   Integer list = new Integer(name, value);	//creates a new object for the node
+	   
+	 /* base case for the first element */
+	   if (front == null)					
+           front = prev = list;				//both the first node and the current node are set to the first element
+     //NOTE: New objects of type "Integer" point to null by default, so no need to explicitly set list.next to null
+	 
+	 /* If the new element to be added isn't first */
+	   else
+       {
+		   /* Adding the node to the front*/
+		   if(front.value <= value)
+		   {
+			   list.next = front;
+			   front = list;				//new element becomes first
+		   }
+		   
+		   /* Adding to anywhere other than the front */
+		   else if (value <= front.value)
+		   {
+			   /* Adding the node to the end*/
+			   if (value <= prev.value)
+			   {
+			           prev.next = list; 	//the last element references the new object
+			           prev = list;			//the current node is set to the newly created object (which, in turn, has a list.next value of null) 
+			   }
+			   else
+			   {
+				   checker = front;
+				   while(checker != null)
+				   {
+					   /* Checks to find the position the newest element should be placed in*/
+					   if((checker.value >= value) && (value >= checker.next.value))
+					   {
+						   list.next = checker.next;
+						   checker.next = list;
+						   checker = null;
+					   }
+					   else
+					   checker = checker.next;
+				   }
+			   }
+		   }
+		}
+   }
+
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * Reads elements from a file into the linkedlist
+    * @param filename is the file that is to be read 
+    *
+    * ---------------------------------------------------------------------------------------------
+    **/
+   
+   public void readSetOriginal(String fileName) throws IOException {
+	      
+	      File inFile = new File(fileName);             // Let a File object represent the input file
+	      Scanner read = new Scanner(inFile);           // use the Scanner class to read the input stream 
+	      
+	      while (read.hasNext()) {                      // repeat until the end of the loop
+	         if (read.hasNext())
+	    	  enQueue(read.next(), read.nextInt());               // reads and populates the list
+	  	      }
+	      read.close();                                 // closes the input stream
+	   }
+
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * Reads elements from a file into the linkedlist in order  of priority value (descending order)
+    * @param filename is the file that is to be read 
+    *
+    * ---------------------------------------------------------------------------------------------
+    **/
+   public void readSetOrdered(String fileName) throws IOException {
+	      
+	      File inFile = new File(fileName);             // Let a File object represent the input file
+	      Scanner read = new Scanner(inFile);           // use the Scanner class to read the input stream 
+	      
+	      while (read.hasNext()) {                      // repeat until the end of the loop
+	         if (read.hasNext())
+	    	  orderQueue(read.next(), read.nextInt());               // reads and populates the array
+	  	      }
+	      read.close();                                 // closes the input stream
+	   }
+
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * Fetches an Integer object and remove that object from the queue. 
+    * 
+    * Edit: In this method, a integers are removed, one after the other, by moving the references to null
+    * until the "first" node makes a reference to null.  
+    *
+    * ---------------------------------------------------------------------------------------------
+    **/   
+   public String deQueue() {
+	   /* If there is no element in the linked list*/
+	   if(front == null)
+	   {
+		   System.out.println("You can't dequeue an empty list!");		// Scream at the user for being careless
+		   return null;
+	   }
+	   
+	   Integer list = front; 			// creates a new object to reference to the first node
+	   front = front.next;				// change the position of the reference element to the next element in the list
+	   return String.format("%6s|%02d", list.name, list.value);
+	   //return list.name + "|" + list.value;				// return the value of the dereferenced element
+	   }
+
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * Returns true if the queue is empty; otherwise, false
+    *
+    * ---------------------------------------------------------------------------------------------
+    **/      
+   public boolean isEmpty() {
+      if (front == null)
+         return true;
+      else
+         return false;
+   }
+   
+   /** 
+    * ---------------------------------------------------------------------------------------------
+    * An entry point for program execution
+    * ---------------------------------------------------------------------------------------------
+    **/      
+   public static void main(String[] args) throws IOException {
+         // performs enqueue operations
+      PriorityQueue q = new PriorityQueue();
+    
+      q.readSetOriginal("ships.txt");
+        System.out.print("Original list: ");
+         // performs dequeue operations
+      while ( !q.isEmpty() ) {
+        System.out.print( "[" + q.deQueue() + "] ");       
+      }
+      System.out.println("\n");
+    
+      //performs orderedqueue operation
+      q.readSetOrdered("ships.txt");
+      
+      System.out.print("Ordered list:  ");
+      // performs dequeue operations
+   while ( !q.isEmpty() ) {
+     System.out.print( "[" + q.deQueue() + "] ");       
+   }
+   System.out.println("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+   }
+
+}
